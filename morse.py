@@ -9,19 +9,49 @@ Pause between dots and dashes in a character – is 1 time unit long.
 Pause between characters inside a word – is 3 time units long.
 Pause between words – is 7 time units long.
 """
-__author__ = '???'
+__author__ = """Greg Spurgeon with Help from Joseph and web resources
+https://www.regextester.com/95367 and
+https://pythonexamples.org/python-split-string-by-regex/"""
 
 from morse_dict import MORSE_2_ASCII
+import re
 
 
 def decode_bits(bits):
-    # your code here
-    return
+    """This decodes binary langauge in morse code"""
+    bits = bits.strip("0")
+    result = ''
+    split_bits = re.split('(0+)', bits)
+    # checking for smallest unit size in the bits string
+    unit = len(sorted(split_bits, key=len)[0])
+    # """Loop below is checking for the units size and
+    # assigning a morse code value for each binary character"""
+    for element in split_bits:
+        if "1" in element:
+            if len(element) // unit == 1:
+                result += "."
+            else:
+                result += "-"
+        else:
+            if len(element) // unit == 3:
+                result += " "
+            elif len(element) // unit == 7:
+                result += "   "
+    return result
 
 
 def decode_morse(morse):
-    # your code here
-    return
+    result = ''
+    """ statement below uses regex to split morse string into
+     a list of characters"""
+    new_morse = re.split(r"(\s+)", morse)
+    # Loop below asigns a space or a character to results string
+    for character in new_morse:
+        if character == "   ":
+            result += " "
+        elif MORSE_2_ASCII.get(character):
+            result += MORSE_2_ASCII[character]
+    return result.strip()
 
 
 if __name__ == '__main__':
